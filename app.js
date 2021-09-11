@@ -65,7 +65,7 @@ const galleryItems = [
 ];
 
 const refs = {
-  galleryContainer: document.querySelector('.js-gallery'),
+  galleryContainer: document.querySelector('ul.js-gallery'),
   modalWindow: document.querySelector('.js-lightbox'),
   closeBtn: document.querySelector('.lightbox__button'),
   currentImage: document.querySelector('.lightbox__image'),
@@ -75,7 +75,6 @@ const refs = {
 const galleryMarkup = createGalleryCard(galleryItems);
 
 refs.galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup)
-
 refs.galleryContainer.addEventListener('click', openModalWindow)
 refs.closeBtn.addEventListener('click', closeModalWindow)
 refs.overlay.addEventListener('click', closeModalWindow)
@@ -97,10 +96,12 @@ function createGalleryCard(galleryItem) {
 }
 
 
-function openModalWindow () {
+function openModalWindow (evt) {
+  if (!evt.target.classList.contains('gallery__image')) return
+  evt.preventDefault()
   refs.currentImage.attributes.src.nodeValue = ''
   refs.modalWindow.classList.add('is-open')
-  reloadImage()
+  reloadImage(evt.target.dataset.source, evt.target.alt)
   window.addEventListener('keydown', closeModalByKey)
 }
 
@@ -115,12 +116,7 @@ function closeModalByKey(evt) {
   }
 }
 
-
-function reloadImage() {
-  const activeImageAlt = event.target.alt
-  for (let i = 0; i < galleryItems.length; i += 1) {
-    if (galleryItems[i].description === activeImageAlt) {
-      refs.currentImage.attributes.src.nodeValue = galleryItems[i].original 
-    }
-  } 
+function reloadImage(src, alt) {
+  refs.currentImage.src = src
+  refs.currentImage.alt = alt
 }
