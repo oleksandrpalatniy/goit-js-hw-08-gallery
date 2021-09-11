@@ -69,6 +69,7 @@ const refs = {
   modalWindow: document.querySelector('.js-lightbox'),
   closeBtn: document.querySelector('.lightbox__button'),
   currentImage: document.querySelector('.lightbox__image'),
+  overlay: document.querySelector('.lightbox__overlay'),
 }
 
 const galleryMarkup = createGalleryCard(galleryItems);
@@ -77,6 +78,7 @@ refs.galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup)
 
 refs.galleryContainer.addEventListener('click', openModalWindow)
 refs.closeBtn.addEventListener('click', closeModalWindow)
+refs.overlay.addEventListener('click', closeModalWindow)
 
 function createGalleryCard(galleryItem) {
   return galleryItem.map(({ preview, original, description }) => {
