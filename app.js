@@ -102,12 +102,12 @@ function openModalWindow (evt) {
   refs.currentImage.attributes.src.nodeValue = ''
   refs.modalWindow.classList.add('is-open')
   reloadImage(evt.target.dataset.source, evt.target.alt)
-  window.addEventListener('keydown', closeModalByKey)
+  window.addEventListener('keydown', pressKey)
 }
 
 function closeModalWindow() {
   refs.modalWindow.classList.remove('is-open')
-  window.removeEventListener('keydown', closeModalByKey);
+  window.removeEventListener('keydown', pressKey);
   }
 
 function closeModalByKey(evt) {
@@ -119,4 +119,41 @@ function closeModalByKey(evt) {
 function reloadImage(src, alt) {
   refs.currentImage.src = src
   refs.currentImage.alt = alt
+}
+
+
+
+function pressKey(evt) {
+  if (!refs.modalWindow.classList.contains('is-open')) return;
+  if (evt.code === 'Escape'){
+      closeModalWindow()
+  }
+  if (evt.code === 'ArrowLeft'){
+      prevImage()
+  }
+  if (evt.code === 'ArrowRight'){
+      nextImage()
+  }
+}
+
+function nextImage() {
+  let currentImageIndex = imageIndex(refs.currentImage.getAttribute('src'))
+  if (currentImageIndex === galleryItems.length - 1) currentImageIndex = -1;
+  reloadImage(
+    galleryItems[currentImageIndex + 1].original,
+    galleryItems[currentImageIndex + 1].description,
+  )
+ }
+
+function prevImage() {
+  let currentImageIndex = imageIndex(refs.currentImage.getAttribute('src'))
+  if (currentImageIndex === 0) currentImageIndex = galleryItems.length
+  reloadImage(
+  galleryItems[currentImageIndex - 1].original,
+  galleryItems[currentImageIndex - 1].description,
+  )
+}
+
+function imageIndex(src) {
+  return galleryItems.indexOf(galleryItems.find(element => element.original === src)) 
 }
